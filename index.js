@@ -9,13 +9,21 @@ const apiRoutes = require("./routes/api");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+
+const allowedOrigins = (
+  process.env.CLIENT_URL || "http://localhost:5173"
+)
+  .split(",")
+  .map((url) => url.trim().replace(/\/$/, ""));
+
 app.use(
   cors({
-    origin: (process.env.CLIENT_URL || "http://localhost:5173")
-      .split(",")
-      .map((url) => url.trim()),
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 app.use(express.json({ limit: "10kb" }));
 
